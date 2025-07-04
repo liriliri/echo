@@ -6,10 +6,7 @@ import store from './store'
 import Overview from './components/overview/Overview'
 import Screenshot from './components/screenshot/Screenshot'
 import Application from './components/application/Application'
-import { createPortal } from 'react-dom'
-import LunaModal from 'luna-modal/react'
 import { t } from '../../common/util'
-import icon from '../assets/icon.png'
 import Process from './components/process/Process'
 import Shell from './components/shell/Shell'
 import Layout from './components/layout/Layout'
@@ -18,8 +15,6 @@ import Webview from './components/webview/Webview'
 import Hilog from './components/hilog/Hilog'
 
 export default observer(function App() {
-  const [aboutVisible, setAboutVisible] = useState(false)
-
   useEffect(() => {
     const offUpdateError = main.on('updateError', () => {
       Modal.alert(t('updateErr'))
