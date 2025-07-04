@@ -21,7 +21,6 @@ export default observer(function App() {
   const [aboutVisible, setAboutVisible] = useState(false)
 
   useEffect(() => {
-    const offShowAbout = main.on('showAbout', () => setAboutVisible(true))
     const offUpdateError = main.on('updateError', () => {
       Modal.alert(t('updateErr'))
     })
@@ -35,7 +34,6 @@ export default observer(function App() {
       }
     })
     return () => {
-      offShowAbout()
       offUpdateError()
       offUpdateNotAvailable()
       offUpdateAvailable()
@@ -77,23 +75,6 @@ export default observer(function App() {
             </Panel>
           </div>
         </div>
-      )}
-      {createPortal(
-        <LunaModal
-          title={t('aboutEcho')}
-          visible={aboutVisible}
-          width={400}
-          onClose={() => setAboutVisible(false)}
-        >
-          <div className={Style.about}>
-            <img className={Style.icon} src={icon} />
-            <div>ECHO</div>
-            <div>
-              {t('version')} {ECHO_VERSION}
-            </div>
-          </div>
-        </LunaModal>,
-        document.body
       )}
     </>
   )
