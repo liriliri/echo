@@ -18,15 +18,15 @@ await $`npm run build:renderer`
 
 await fs.copy('build', 'dist/build')
 if (isWindows) {
-  await fs.copy('hdc/win', 'dist/hdc')
+  await fs.copy('resources/hdc/win', 'dist/resources/hdc')
 } else {
   if (process.arch === 'arm64') {
-    await fs.copy('hdc/mac/arm64', 'dist/hdc')
+    await fs.copy('resources/hdc/mac/arm64', 'dist/resources/hdc')
   } else {
-    await fs.copy('hdc/mac/x64', 'dist/hdc')
+    await fs.copy('resources/hdc/mac/x64', 'dist/resources/hdc')
   }
 }
-await fs.copy('uitestkit_sdk', 'dist/uitestkit_sdk')
+await fs.copy('resources/uitestkit_sdk', 'dist/resources/uitestkit_sdk')
 cd('dist')
 
 await fs.writeJson('package.json', pkg, {

@@ -4,7 +4,7 @@ import {
   IpcInputKey,
   IpcScreencap,
 } from '../../common/types'
-import { handleEvent, resolveUnpack } from 'share/main/lib/util'
+import { handleEvent, resolveResources } from 'share/main/lib/util'
 import Hdc, { Client } from 'hdckit'
 import log from 'share/common/log'
 import map from 'licia/map'
@@ -147,15 +147,15 @@ const screencap: IpcScreencap = async function (connectKey) {
 }
 
 async function openHdcCli() {
-  let cwd = resolveUnpack('hdc')
+  let cwd = resolveResources('hdc')
   if (isDev()) {
     if (isWindows) {
-      cwd = resolveUnpack('hdc/win')
+      cwd = resolveResources('hdc/win')
     } else {
       if (process.arch === 'arm64') {
-        cwd = resolveUnpack('hdc/mac/arm64')
+        cwd = resolveResources('hdc/mac/arm64')
       } else {
-        cwd = resolveUnpack('hdc/mac/x64')
+        cwd = resolveResources('hdc/mac/x64')
       }
     }
   }
@@ -180,15 +180,17 @@ async function openHdcCli() {
 export async function init() {
   logger.info('init')
 
-  let bin = isWindows ? resolveUnpack('hdc/hdc.exe') : resolveUnpack('hdc/hdc')
+  let bin = isWindows
+    ? resolveResources('hdc/hdc.exe')
+    : resolveResources('hdc/hdc')
   if (isDev()) {
     if (isWindows) {
-      bin = resolveUnpack('hdc/win/hdc.exe')
+      bin = resolveResources('hdc/win/hdc.exe')
     } else {
       if (process.arch === 'arm64') {
-        bin = resolveUnpack('hdc/mac/arm64/hdc')
+        bin = resolveResources('hdc/mac/arm64/hdc')
       } else {
-        bin = resolveUnpack('hdc/mac/x64/hdc')
+        bin = resolveResources('hdc/mac/x64/hdc')
       }
     }
   }

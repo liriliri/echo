@@ -11,7 +11,7 @@ import {
   IpcTouchUp,
 } from '../../../common/types'
 import { getTargetStore, setTargetStore } from './base'
-import { handleEvent, resolveUnpack } from 'share/main/lib/util'
+import { handleEvent, resolveResources } from 'share/main/lib/util'
 
 let client: Client
 
@@ -20,7 +20,7 @@ async function getUiDriver(connectKey: string): Promise<UiDriver> {
   if (!uiDriver) {
     const target = await client.getTarget(connectKey)
     uiDriver = await target.createUiDriver(
-      resolveUnpack('uitestkit_sdk/uitest_agent_v1.1.0.so'),
+      resolveResources('uitestkit_sdk/uitest_agent_v1.1.0.so'),
       '1.1.0'
     )
     await uiDriver.stop()

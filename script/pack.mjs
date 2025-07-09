@@ -14,8 +14,12 @@ const config = {
   directories: {
     output: `../release/${pkg.version}`,
   },
-  files: ['main', 'preload', 'renderer', 'hdc', 'uitestkit_sdk'],
-  asarUnpack: ['hdc/**/*', 'uitestkit_sdk/**/*'],
+  files: ['main', 'preload', 'renderer'],
+  extraResources: {
+    from: 'resources',
+    to: './',
+    filter: ['**/*'],
+  },
   artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
   nsis: {
     allowToChangeInstallationDirectory: true,
