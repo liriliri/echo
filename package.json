@@ -2,7 +2,7 @@
   "name": "echo",
   "productName": "ECHO",
   "appId": "io.liriliri.echo",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Harmony hdc desktop app",
   "main": "dist/main/index.js",
   "scripts": {
