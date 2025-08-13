@@ -28,9 +28,8 @@ export function showWin() {
     name: 'main',
     minWidth: 960,
     minHeight: 640,
-    ...store.get('bounds'),
-    maximized: store.get('maximized'),
-    onSavePos: () => window.savePos(win, store, true),
+    width: 960,
+    height: 640,
     menu: true,
   })
 

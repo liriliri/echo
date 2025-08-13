@@ -10,12 +10,7 @@ fs.exists(getUserDataPath('data'), function (exists) {
 })
 
 export const getMainStore = memoize(function () {
-  return new FileStore(getUserDataPath('data/main.json'), {
-    bounds: {
-      width: 960,
-      height: 640,
-    },
-  })
+  return new FileStore(getUserDataPath('data/main.json'), {})
 })
 
 export const getSettingsStore = memoize(function () {
@@ -29,10 +24,6 @@ export const getSettingsStore = memoize(function () {
 
 export const getScreencastStore = memoize(function () {
   return new FileStore(getUserDataPath('data/screencast.json'), {
-    bounds: {
-      width: 430,
-      height: 640,
-    },
     scale: 1,
     alwaysOnTop: false,
   })
