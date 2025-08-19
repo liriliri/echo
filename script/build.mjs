@@ -17,15 +17,7 @@ await $`npm run build:preload`
 await $`npm run build:renderer`
 
 await fs.copy('build', 'dist/build')
-if (isWindows) {
-  await fs.copy('resources/hdc/win', 'dist/resources/hdc')
-} else {
-  if (process.arch === 'arm64') {
-    await fs.copy('resources/hdc/mac/arm64', 'dist/resources/hdc')
-  } else {
-    await fs.copy('resources/hdc/mac/x64', 'dist/resources/hdc')
-  }
-}
+await fs.copy('resources/hdc', 'dist/resources/hdc')
 await fs.copy('resources/uitestkit_sdk', 'dist/resources/uitestkit_sdk')
 cd('dist')
 

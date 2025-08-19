@@ -148,17 +148,6 @@ const screencap: IpcScreencap = async function (connectKey) {
 
 async function openHdcCli() {
   let cwd = resolveResources('hdc')
-  if (isDev()) {
-    if (isWindows) {
-      cwd = resolveResources('hdc/win')
-    } else {
-      if (process.arch === 'arm64') {
-        cwd = resolveResources('hdc/mac/arm64')
-      } else {
-        cwd = resolveResources('hdc/mac/x64')
-      }
-    }
-  }
   const hdcPath = settingsStore.get('hdcPath')
   if (!isStrBlank(hdcPath) && fs.existsSync(hdcPath)) {
     cwd = path.dirname(hdcPath)
@@ -183,17 +172,6 @@ export async function init() {
   let bin = isWindows
     ? resolveResources('hdc/hdc.exe')
     : resolveResources('hdc/hdc')
-  if (isDev()) {
-    if (isWindows) {
-      bin = resolveResources('hdc/win/hdc.exe')
-    } else {
-      if (process.arch === 'arm64') {
-        bin = resolveResources('hdc/mac/arm64/hdc')
-      } else {
-        bin = resolveResources('hdc/mac/x64/hdc')
-      }
-    }
-  }
   const hdcPath = settingsStore.get('hdcPath')
   if (hdcPath === 'hdc' || (!isStrBlank(hdcPath) && fs.existsSync(hdcPath))) {
     bin = hdcPath

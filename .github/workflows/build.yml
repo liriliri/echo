@@ -21,6 +21,8 @@ jobs:
         node-version: '18.x'
     - run: |
         npm i
+        npm run hdc
+        npm run uitestkit
         npm run build
         npm run pack
       env:
