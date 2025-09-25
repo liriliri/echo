@@ -12,6 +12,7 @@ export default class ScreencastClient {
   private connectKey: string
   private offCaptureScreen: types.AnyFn = noop
   private readiness = new Readiness()
+  private isTouching = false
   constructor(connectKey: string) {
     this.connectKey = connectKey
     this.ready = this.readiness.ready('captureScreen')
@@ -103,14 +104,21 @@ export default class ScreencastClient {
       canvas.focus()
       const { pointerX, pointerY } = this.getPointer(e)
       main.touchDown(this.connectKey, pointerX, pointerY)
+      this.isTouching = true
     })
     canvas.addEventListener('pointermove', (e) => {
+      if (!this.isTouching) {
+        return
+      }
       const { pointerX, pointerY } = this.getPointer(e)
       main.touchMove(this.connectKey, pointerX, pointerY)
     })
-    canvas.addEventListener('pointerup', (e) => {
+    const onTouchEnd = (e: PointerEvent) => {
       const { pointerX, pointerY } = this.getPointer(e)
       main.touchUp(this.connectKey, pointerX, pointerY)
-    })
+      this.isTouching = false
+    }
+    canvas.addEventListener('pointerup', onTouchEnd)
+    canvas.addEventListener('pointerleave', onTouchEnd)
   }
 }
