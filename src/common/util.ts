@@ -1,18 +1,10 @@
-import I18n from 'licia/I18n'
-import types from 'licia/types'
 import zhCN from './langs/zh-CN.json'
+import { init as initI18n } from 'share/common/i18n'
+export { t, i18n, hasLocale } from 'share/common/i18n'
 
 const langs = {
   'zh-CN': zhCN,
   'en-US': zhCN,
 }
 
-export const i18n = new I18n('zh-CN', langs)
-
-export function hasLocale(locale: string) {
-  return !!langs[locale]
-}
-
-export function t(path: string | string[], data?: types.PlainObj<any>) {
-  return i18n.t(path, data)
-}
+initI18n(langs)
