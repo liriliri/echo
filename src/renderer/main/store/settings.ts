@@ -4,7 +4,7 @@ import isUndef from 'licia/isUndef'
 export class Settings {
   theme = 'light'
   hdcPath = ''
-  killHdcWhenExit = true
+  killHdcWhenExit = false
   constructor() {
     makeObservable(this, {
       theme: observable,

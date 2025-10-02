@@ -18,7 +18,7 @@ export const getSettingsStore = memoize(function () {
     language: 'system',
     theme: 'system',
     hdcPath: '',
-    killHdcWhenExit: true,
+    killHdcWhenExit: false,
   })
 })
 
