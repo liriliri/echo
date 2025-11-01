@@ -16,11 +16,14 @@ import 'luna-command-palette/css'
 import 'luna-dom-viewer/css'
 import 'luna-logcat/css'
 import 'luna-virtual-list/css'
+import 'luna-split-pane/css'
+import 'luna-performance-monitor/css'
 import 'share/renderer/luna.scss'
 import './luna.scss'
 import 'share/renderer/main.scss'
 import './main.scss'
 import './icon.css'
+import 'share/renderer/main'
 
 const logger = log('renderer')
 logger.info('start')
