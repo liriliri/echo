@@ -84,7 +84,7 @@ async function getScreen(connectKey: string) {
 
   let physicalResolution = ''
   const physicalResolutionMatch = screen.match(
-    /physical screen resolution: ((\d+)x(\d+))/
+    /powerStatus=(?:POWER_STATUS_ON|POWER_STATUS_SUSPEND).*physical resolution=(\d+x\d+)/
   )
   if (physicalResolutionMatch) {
     physicalResolution = physicalResolutionMatch[1]
