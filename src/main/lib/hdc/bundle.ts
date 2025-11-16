@@ -9,7 +9,7 @@ import {
   IpcStartBundle,
   IpcStopBundle,
   IpcUninstallBundle,
-} from '../../../common/types'
+} from 'common/types'
 import { Client } from 'hdckit'
 import { handleEvent } from 'share/main/lib/util'
 import { shell } from './base'

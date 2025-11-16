@@ -6,7 +6,7 @@ import LunaToolbar, {
   LunaToolbarText,
 } from 'luna-toolbar/react'
 import ToolbarIcon from 'share/renderer/components/ToolbarIcon'
-import { t } from '../../../common/util'
+import { t } from 'common/util'
 import Style from './Toolbar.module.scss'
 import store from '../store'
 import download from 'licia/download'

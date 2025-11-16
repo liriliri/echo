@@ -3,7 +3,7 @@ import {
   IpcGetTargets,
   IpcInputKey,
   IpcScreencap,
-} from '../../common/types'
+} from 'common/types'
 import { handleEvent, resolveResources } from 'share/main/lib/util'
 import Hdc, { Client } from 'hdckit'
 import log from 'share/common/log'

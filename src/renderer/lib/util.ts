@@ -1,4 +1,4 @@
-import { t } from '../../common/util'
+import { t } from 'common/util'
 import isEmpty from 'licia/isEmpty'
 import { isObservable, toJS } from 'mobx'
 import { notify } from 'share/renderer/lib/util'

@@ -1,11 +1,11 @@
 import LunaModal from 'luna-modal/react'
 import { createPortal } from 'react-dom'
-import { t } from '../../../../common/util'
+import { t } from 'common/util'
 import Style from './BundleInfoModal.module.scss'
 import defaultIcon from '../../../assets/default-icon.png'
 import { IModalProps } from 'share/common/types'
 import { Copyable } from '../common/Copyable'
-import { IBundleInfo } from '../../../../common/types'
+import { IBundleInfo } from 'common/types'
 import dateFormat from 'licia/dateFormat'
 
 interface IProps extends IModalProps {

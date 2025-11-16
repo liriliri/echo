@@ -1,5 +1,5 @@
 import BaseStore from 'share/renderer/store/BaseStore'
-import { ITarget } from '../../common/types'
+import { ITarget } from 'common/types'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import ScreencastClient from './lib/ScreencastClient'
 

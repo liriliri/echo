@@ -1,8 +1,4 @@
-import {
-  IpcCreateShell,
-  IpcKillShell,
-  IpcWriteShell,
-} from '../../../common/types'
+import { IpcCreateShell, IpcKillShell, IpcWriteShell } from 'common/types'
 import { Client } from 'hdckit'
 import Emitter from 'licia/Emitter'
 import uniqId from 'licia/uniqId'

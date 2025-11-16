@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import log from 'share/common/log'
-import { i18n, t } from '../common/util'
+import { i18n, t } from 'common/util'
 import getUrlParam from 'licia/getUrlParam'
 import 'share/renderer/main'
 import 'luna-toolbar/css'

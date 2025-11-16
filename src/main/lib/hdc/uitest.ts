@@ -9,7 +9,7 @@ import {
   IpcTouchDown,
   IpcTouchMove,
   IpcTouchUp,
-} from '../../../common/types'
+} from 'common/types'
 import { getTargetStore, setTargetStore } from './base'
 import { handleEvent, resolveResources } from 'share/main/lib/util'
 

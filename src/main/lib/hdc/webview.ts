@@ -5,7 +5,7 @@ import singleton from 'licia/singleton'
 import axios from 'axios'
 import { shell, forwardTcp } from './base'
 import { handleEvent } from 'share/main/lib/util'
-import { IpcGetWebviews } from '../../../common/types'
+import { IpcGetWebviews } from 'common/types'
 
 const getWebviews: IpcGetWebviews = singleton(async (connectKey, pid) => {
   const webviews: any[] = []
