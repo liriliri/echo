@@ -83,9 +83,13 @@ async function getScreen(connectKey: string) {
   const screen = await shell(connectKey, 'hidumper -s RenderService -a screen')
 
   let physicalResolution = ''
-  const physicalResolutionMatch = screen.match(
+  let physicalResolutionMatch = screen.match(
     /physical screen resolution: ((\d+)x(\d+))/
   )
+  if (!physicalResolutionMatch) {
+    // For OpenHarmony 6.x
+    physicalResolutionMatch = screen.match(/physical resolution=((\d+)x(\d+))/)
+  }
   if (physicalResolutionMatch) {
     physicalResolution = physicalResolutionMatch[1]
   }
