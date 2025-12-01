@@ -2,14 +2,14 @@ import { makeObservable, observable, runInAction } from 'mobx'
 import extend from 'licia/extend'
 
 export class Layout {
-  treeWidth = 400
   border = true
   attribute = false
+  weights = [30, 70, 30]
   constructor() {
     makeObservable(this, {
-      treeWidth: observable,
       border: observable,
       attribute: observable,
+      weights: observable,
     })
 
     this.init()
@@ -25,9 +25,9 @@ export class Layout {
       this[key] = val
     })
     await main.setMainStore('layout', {
-      treeWidth: this.treeWidth,
       border: this.border,
       attribute: this.attribute,
+      weights: this.weights,
     })
   }
 }

@@ -30,6 +30,7 @@ import ImageViewer from 'luna-image-viewer'
 import DomViewer from 'luna-dom-viewer'
 import isEmpty from 'licia/isEmpty'
 import filter from 'licia/filter'
+import LunaSplitPane, { LunaSplitPaneItem } from 'luna-split-pane/react'
 
 export default observer(function Layout() {
   const [image, setImage] = useState<IImage>({
@@ -44,17 +45,19 @@ export default observer(function Layout() {
   const [selected, setSelected] = useState<Element | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
+  const { target, layout } = store
+
   useEffect(() => {
     refresh()
   }, [])
 
   async function refresh() {
-    if (!store.target || isLoading) {
+    if (!target || isLoading) {
       return
     }
 
     setIsLoading(true)
-    const data = await main.screencap(store.target.key)
+    const data = await main.screencap(target.key)
     const url = dataUrl.stringify(data, 'image/png')
     setHierarchy(null)
     setSelected(null)
@@ -65,7 +68,7 @@ export default observer(function Layout() {
         height: img.height,
       })
     })
-    windowHierarchyRef.current = await main.dumpLayout(store.target.key)
+    windowHierarchyRef.current = await main.dumpLayout(target.key)
     const doc = xmlToDom(windowHierarchyRef.current)
     transformHierarchy(doc)
     setHierarchy(doc)
@@ -92,7 +95,7 @@ export default observer(function Layout() {
           icon="refresh"
           title={t('refresh')}
           onClick={refresh}
-          disabled={!store.target}
+          disabled={!target}
         />
         <ToolbarIcon
           icon="save"
@@ -176,27 +179,35 @@ export default observer(function Layout() {
           text={image.url ? `${image.width}x${image.height}` : ''}
         />
       </LunaToolbar>
-      <div className={className('panel-body', Style.container)}>
-        <Tree
-          hierarchy={hierarchy}
-          isLoading={isLoading}
-          onSelect={select}
-          selected={selected}
-          onDomViewerCreate={(domViewer) => {
-            domViewer.expand()
-            domViewerRef.current = domViewer
-          }}
-        />
-        <Screenshot
-          image={image}
-          hierarchy={hierarchy}
-          selected={selected}
-          onImageViewerCreate={(imageViewer) =>
-            (imageViewerRef.current = imageViewer)
-          }
-          onSelect={select}
-        />
-        <Detail selected={selected} />
+      <div className={className('panel-body', Style.body)}>
+        <LunaSplitPane onResize={(weights) => layout.set('weights', weights)}>
+          <LunaSplitPaneItem minSize={250} weight={layout.weights[0]}>
+            <Tree
+              hierarchy={hierarchy}
+              isLoading={isLoading}
+              onSelect={select}
+              selected={selected}
+              onDomViewerCreate={(domViewer) => {
+                domViewer.expand()
+                domViewerRef.current = domViewer
+              }}
+            />
+          </LunaSplitPaneItem>
+          <LunaSplitPaneItem minSize={200} weight={layout.weights[1]}>
+            <Screenshot
+              image={image}
+              hierarchy={hierarchy}
+              selected={selected}
+              onImageViewerCreate={(imageViewer) =>
+                (imageViewerRef.current = imageViewer)
+              }
+              onSelect={select}
+            />
+          </LunaSplitPaneItem>
+          <LunaSplitPaneItem minSize={250} weight={layout.weights[2]}>
+            <Detail selected={selected} />
+          </LunaSplitPaneItem>
+        </LunaSplitPane>
       </div>
     </div>
   )
