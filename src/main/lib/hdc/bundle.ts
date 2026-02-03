@@ -103,7 +103,8 @@ const getBundleInfos: IpcGetBundleInfos = async (connectKey, bundleNames) => {
     if (mainEntry) {
       const mainModuleInfo =
         info.hapModuleInfos[info.hapModuleNames.indexOf(mainEntry)]
-      bundleInfo.mainAbility = mainModuleInfo.mainAbility
+      bundleInfo.mainAbility =
+        mainModuleInfo.mainAbility || mainModuleInfo.abilityInfos[0].name
     }
 
     if (!bundleInfo.system && !startWith(bundleName, 'com.huawei')) {
