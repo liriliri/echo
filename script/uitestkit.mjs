@@ -1,7 +1,8 @@
 import path from 'path'
 import normalizePath from 'licia/normalizePath.js'
 
-const url = 'https://release.liriliri.io/echo/uitestkit_sdk-1.1.0.zip'
+const url =
+  'https://raw.githubusercontent.com/liriliri/electron-resources/master/echo/uitestkit_sdk-1.1.0.zip'
 
 const uitestkitDir = resolve(__dirname, '../resources/uitestkit_sdk')
 await fs.ensureDir(uitestkitDir)

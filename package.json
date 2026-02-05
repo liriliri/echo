@@ -17,6 +17,7 @@
     "pack": "zx script/pack.mjs",
     "start": "electron ./dist/main/index.js --inspect=9229",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "init": "npm run hdc && npm run uitestkit",
     "uitestkit": "zx script/uitestkit.mjs",
     "hdc": "zx script/hdc.mjs",
     "format": "lsla prettier \"src/**/*.{ts,tsx,scss,css,json}\" \"*.{js,ts,json}\" \"script/*.mjs\" --write",
