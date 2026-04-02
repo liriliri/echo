@@ -11,7 +11,7 @@ if (isWindows) {
   platform = 'win'
 }
 
-const url = `https://raw.githubusercontent.com/liriliri/electron-resources/master/echo/hdc-${platform}-${os.arch()}.zip`
+const url = `https://raw.githubusercontent.com/liriliri/electron-resources/master/hdc/hdc-${platform}-${os.arch()}.zip`
 
 const zipPath = resolve(hdcDir, 'hdc.zip')
 await $`curl -Lk ${url} > ${zipPath}`
