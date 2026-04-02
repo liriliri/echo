@@ -17,9 +17,8 @@
     "pack": "zx script/pack.mjs",
     "start": "electron ./dist/main/index.js --inspect=9229",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "init": "npm run hdc && npm run uitestkit",
-    "uitestkit": "zx script/uitestkit.mjs",
-    "hdc": "zx script/hdc.mjs",
+    "init": "npm run resources",
+    "resources": "zx script/resources.mjs",
     "format": "lsla prettier \"src/**/*.{ts,tsx,scss,css,json}\" \"*.{js,ts,json}\" \"script/*.mjs\" --write",
     "gen:icon": "lsla genIcon --input src/renderer/ --output src/renderer/icon.css --name echo-icon --source src/renderer/icon/",
     "gen:theme": "lsla genTheme --input src/common/theme.json --output src/renderer/theme.scss && lsla genTheme --input src/common/theme.json --output src/common/theme.ts"
