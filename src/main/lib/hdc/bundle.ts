@@ -21,6 +21,16 @@ import map from 'licia/map'
 import startWith from 'licia/startWith'
 import filter from 'licia/filter'
 import contain from 'licia/contain'
+import path from 'node:path'
+import os from 'node:os'
+import fs from 'fs-extra'
+import {
+  applyOnlineBundleFallback,
+  bundleInfoFromDump,
+  isLocalIconPath,
+  parseBmDumpOutput,
+  shouldFetchOnlineBundleInfo,
+} from './bundleDump'
 
 const logger = log('hdcBundle')
 
@@ -71,53 +81,41 @@ const getBundleInfos: IpcGetBundleInfos = async (connectKey, bundleNames) => {
     connectKey,
     map(bundleNames, (name) => `bm dump -n ${name}`)
   )
-  const infos = map(dumpInfos, (dump) => {
-    const lines = dump.split('\n')
-    return JSON.parse(lines.slice(1).join('\n'))
-  })
+  const infos = map(dumpInfos, (dump) => parseBmDumpOutput(dump))
 
   for (let i = 0, len = bundleNames.length; i < len; i++) {
     const bundleName = bundleNames[i]
-    const bundleInfo: IBundleInfo = {
-      bundleName,
-      label: bundleName,
-      icon: '',
-      system: false,
-      versionName: '',
-      apiTargetVersion: 0,
-      vendor: '',
-      installTime: 0,
-      releaseType: '',
-    }
+    const bundleInfo = bundleInfoFromDump(bundleName, infos[i])
 
-    const info = infos[i]
-    const applicationInfo = info.applicationInfo
-    bundleInfo.system = applicationInfo.isSystemApp
-    bundleInfo.versionName = applicationInfo.versionName
-    bundleInfo.apiTargetVersion = applicationInfo.apiTargetVersion
-    bundleInfo.vendor = applicationInfo.vendor
-    bundleInfo.installTime = info.installTime
-    bundleInfo.releaseType = info.releaseType
-
-    const mainEntry = info.mainEntry
-    if (mainEntry) {
-      const mainModuleInfo =
-        info.hapModuleInfos[info.hapModuleNames.indexOf(mainEntry)]
-      bundleInfo.mainAbility =
-        mainModuleInfo.mainAbility || mainModuleInfo.abilityInfos[0].name
-    }
-
-    if (!bundleInfo.system && !startWith(bundleName, 'com.huawei')) {
+    if (shouldFetchOnlineBundleInfo(bundleName, bundleInfo)) {
       try {
         const onlineInfo = await getOnlineBundleInfo(bundleName)
-        if (onlineInfo.name) {
-          bundleInfo.label = onlineInfo.name
-        }
-        if (onlineInfo.icon) {
-          bundleInfo.icon = onlineInfo.icon
-        }
+        Object.assign(
+          bundleInfo,
+          applyOnlineBundleFallback(bundleInfo, onlineInfo)
+        )
       } catch (e) {
         logger.error(e)
+      }
+    }
+
+    if (isLocalIconPath(bundleInfo.icon)) {
+      try {
+        bundleInfo.icon = await loadLocalIcon(connectKey, bundleInfo.icon)
+      } catch (e) {
+        logger.error(e)
+        bundleInfo.icon = ''
+        if (shouldFetchOnlineBundleInfo(bundleName, bundleInfo)) {
+          try {
+            const onlineInfo = await getOnlineBundleInfo(bundleName)
+            Object.assign(
+              bundleInfo,
+              applyOnlineBundleFallback(bundleInfo, onlineInfo)
+            )
+          } catch (onlineErr) {
+            logger.error(onlineErr)
+          }
+        }
       }
     }
     result.push(bundleInfo)
@@ -144,6 +142,32 @@ async function getOnlineBundleInfo(bundleName: string) {
   onlineInfos[bundleName] = data
 
   return data
+}
+
+async function loadLocalIcon(
+  connectKey: string,
+  iconPath: string
+): Promise<string> {
+  const target = await client.getTarget(connectKey)
+  const dest = path.resolve(
+    os.tmpdir(),
+    `echo-icon-${Date.now()}-${Math.random().toString(16).slice(2)}${path.extname(iconPath)}`
+  )
+  await target.recvFile(iconPath, dest)
+  const buf = await fs.readFile(dest)
+  await fs.remove(dest).catch(() => {})
+  const ext = path.extname(iconPath).toLowerCase()
+  const mime =
+    ext === '.webp'
+      ? 'image/webp'
+      : ext === '.jpg' || ext === '.jpeg'
+        ? 'image/jpeg'
+        : ext === '.svg'
+          ? 'image/svg+xml'
+          : ext === '.gif'
+            ? 'image/gif'
+            : 'image/png'
+  return `data:${mime};base64,${buf.toString('base64')}`
 }
 
 const installBundle: IpcInstallBundle = async (connectKey, hap) => {
