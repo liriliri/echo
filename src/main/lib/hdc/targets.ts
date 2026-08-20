@@ -1,4 +1,9 @@
-import { ITarget } from '../../../common/types'
+export interface HdcTargetInfo {
+  name: string
+  key: string
+  ohosVersion: string
+  sdkVersion: string
+}
 
 export interface HdcTargetClient {
   listTargets(): Promise<string[]>
@@ -26,7 +31,9 @@ export function parseOhosVersion(softwareVersion: unknown): string {
   return version.trim()
 }
 
-export async function getTargets(client: HdcTargetClient): Promise<ITarget[]> {
+export async function getTargets(
+  client: HdcTargetClient
+): Promise<HdcTargetInfo[]> {
   let connectKeys: string[]
   try {
     connectKeys = await client.listTargets()
@@ -52,5 +59,5 @@ export async function getTargets(client: HdcTargetClient): Promise<ITarget[]> {
     })
   )
 
-  return results.filter((target): target is ITarget => target !== null)
+  return results.filter((target): target is HdcTargetInfo => target !== null)
 }

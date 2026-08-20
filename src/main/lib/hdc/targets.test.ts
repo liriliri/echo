@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { getTargets, HdcTargetClient } from './targets'
+import { getTargets, type HdcTargetClient } from './targets.ts'
 
 function mockClient(
   entries: Record<string, Record<string, any> | Error>
