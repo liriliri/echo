@@ -7,7 +7,6 @@ import {
 import { handleEvent, resolveResources } from 'share/main/lib/util'
 import Hdc, { Client } from 'hdckit'
 import log from 'share/common/log'
-import map from 'licia/map'
 import startWith from 'licia/startWith'
 import trim from 'licia/trim'
 import os from 'node:os'
@@ -28,6 +27,7 @@ import { app } from 'electron'
 import * as window from 'share/main/lib/window'
 import isMac from 'licia/isMac'
 import childProcess from 'node:child_process'
+import { getTargets as fetchTargets } from './hdc/targets'
 
 const logger = log('hdc')
 
@@ -36,25 +36,7 @@ const settingsStore = getSettingsStore()
 let client: Client
 
 const getTargets: IpcGetTargets = async function () {
-  const targets = await client.listTargets()
-
-  return Promise.all(
-    map(targets, async (connectKey: string) => {
-      const parameters = await client.getTarget(connectKey).getParameters()
-      let ohosVersion =
-        parameters['const.product.software.version'].split(/\s/)[1]
-      ohosVersion = ohosVersion.slice(0, ohosVersion.indexOf('('))
-
-      const sdkVersion = parameters['const.ohos.apiversion']
-
-      return {
-        name: parameters['const.product.name'],
-        key: connectKey,
-        ohosVersion,
-        sdkVersion,
-      }
-    })
-  ).catch(() => [])
+  return fetchTargets(client)
 }
 
 const getOverview: IpcGetOverview = async function (connectKey) {
