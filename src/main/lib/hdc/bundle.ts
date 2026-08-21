@@ -1,5 +1,4 @@
 import {
-  IBundleInfo,
   IpcCleanBundleCache,
   IpcCleanBundleData,
   IpcGetBundleInfos,
@@ -21,6 +20,7 @@ import map from 'licia/map'
 import startWith from 'licia/startWith'
 import filter from 'licia/filter'
 import contain from 'licia/contain'
+import { getBundleInfosFromDumps } from './bundleInfos'
 
 const logger = log('hdcBundle')
 
@@ -65,48 +65,15 @@ function isSystemBundle(bundle: string) {
 }
 
 const getBundleInfos: IpcGetBundleInfos = async (connectKey, bundleNames) => {
-  const result: IBundleInfo[] = []
-
   const dumpInfos = await shell(
     connectKey,
     map(bundleNames, (name) => `bm dump -n ${name}`)
   )
-  const infos = map(dumpInfos, (dump) => {
-    const lines = dump.split('\n')
-    return JSON.parse(lines.slice(1).join('\n'))
-  })
+  const result = getBundleInfosFromDumps(bundleNames, dumpInfos)
 
-  for (let i = 0, len = bundleNames.length; i < len; i++) {
-    const bundleName = bundleNames[i]
-    const bundleInfo: IBundleInfo = {
-      bundleName,
-      label: bundleName,
-      icon: '',
-      system: false,
-      versionName: '',
-      apiTargetVersion: 0,
-      vendor: '',
-      installTime: 0,
-      releaseType: '',
-    }
-
-    const info = infos[i]
-    const applicationInfo = info.applicationInfo
-    bundleInfo.system = applicationInfo.isSystemApp
-    bundleInfo.versionName = applicationInfo.versionName
-    bundleInfo.apiTargetVersion = applicationInfo.apiTargetVersion
-    bundleInfo.vendor = applicationInfo.vendor
-    bundleInfo.installTime = info.installTime
-    bundleInfo.releaseType = info.releaseType
-
-    const mainEntry = info.mainEntry
-    if (mainEntry) {
-      const mainModuleInfo =
-        info.hapModuleInfos[info.hapModuleNames.indexOf(mainEntry)]
-      bundleInfo.mainAbility =
-        mainModuleInfo.mainAbility || mainModuleInfo.abilityInfos[0].name
-    }
-
+  for (let i = 0, len = result.length; i < len; i++) {
+    const bundleInfo = result[i]
+    const bundleName = bundleInfo.bundleName
     if (!bundleInfo.system && !startWith(bundleName, 'com.huawei')) {
       try {
         const onlineInfo = await getOnlineBundleInfo(bundleName)
@@ -120,7 +87,6 @@ const getBundleInfos: IpcGetBundleInfos = async (connectKey, bundleNames) => {
         logger.error(e)
       }
     }
-    result.push(bundleInfo)
   }
 
   return result
