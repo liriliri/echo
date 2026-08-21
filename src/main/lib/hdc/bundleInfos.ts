@@ -1,12 +1,23 @@
-import { IBundleInfo } from '../../../common/types'
+export interface BundleInfo {
+  bundleName: string
+  versionName: string
+  icon: string
+  label: string
+  system: boolean
+  apiTargetVersion: number
+  vendor: string
+  installTime: number
+  releaseType: string
+  mainAbility?: string
+}
 
 export function parseBmDumpJson(dump: string): any {
   const lines = dump.split('\n')
   return JSON.parse(lines.slice(1).join('\n'))
 }
 
-export function createBundleInfo(bundleName: string, info: any): IBundleInfo {
-  const bundleInfo: IBundleInfo = {
+export function createBundleInfo(bundleName: string, info: any): BundleInfo {
+  const bundleInfo: BundleInfo = {
     bundleName,
     label: bundleName,
     icon: '',
@@ -53,8 +64,8 @@ export function createBundleInfo(bundleName: string, info: any): IBundleInfo {
 export function getBundleInfosFromDumps(
   bundleNames: string[],
   dumpInfos: string[],
-): IBundleInfo[] {
-  const result: IBundleInfo[] = []
+): BundleInfo[] {
+  const result: BundleInfo[] = []
 
   for (let i = 0, len = bundleNames.length; i < len; i++) {
     const bundleName = bundleNames[i]
